@@ -23,6 +23,11 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## URL Base
+```
+http://localhost:3000/
+``` 
+
 
 ## Rotas
 
@@ -58,8 +63,3 @@ $ npm run start:prod
 ```http
   GET /api/v1/task
 ```
-
-
-## License
-
-Nest is [MIT licensed](LICENSE).
