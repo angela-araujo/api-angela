@@ -22,18 +22,43 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+[Postam Collection]((https://github.com/angela-araujo/postman_collection.json))
 
 
+## Rotas
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### Criar usuário
 
-## Stay in touch
+```http
+  POST /api/v1/person
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+#### Criar task
+
+```http
+  POST /api/v1/task
+```
+
+#### Delegar task ou Finalizar task
+
+```http
+  PATCH /api/v1/task/:id
+```
+
+#### Listar tasks por usuário
+
+```http
+  GET /api/v1/task/person/:id
+```
+
+#### Listar todas as tasks
+
+```http
+  GET /api/v1/task
+```
+
 
 ## License
 
