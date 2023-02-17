@@ -29,6 +29,6 @@ export class Person {
   @UpdateDateColumn()
   updateAt: Date;
 
-  // @OneToMany(() => Task, (task) => task.person)
-  // tasks: Task[];
+  @OneToMany(() => Task, (task) => task.person)
+  tasks: Task[];
 }

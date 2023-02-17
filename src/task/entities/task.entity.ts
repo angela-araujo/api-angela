@@ -9,18 +9,18 @@ export class Task {
   @Column({ length: 120, nullable: false })
   title: string;
 
-  @Column({ length: 350 })
+  @Column({ length: 350, nullable: true })
   description: string;
 
   @Column()
   startAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   finishAt: Date;
 
-  @Column()
+  @Column({ nullable: false })
   deadLine: Date;
 
-  //   @ManyToOne(() => Person, (person) => person.tasks)
-  //   person: Person;
+  @ManyToOne(() => Person, (person) => person.tasks)
+  person: Person;
 }

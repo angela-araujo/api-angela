@@ -20,6 +20,11 @@ export class TaskController {
     return this.taskService.create(createTaskDto);
   }
 
+  @Get('/person/:id')
+  findByPerson(@Param('id') id: string) {
+    return this.taskService.findByPerson(+id);
+  }
+
   @Get()
   findAll() {
     return this.taskService.findAll();

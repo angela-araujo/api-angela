@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { equal } from 'assert';
 import { Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -17,14 +18,45 @@ export class TaskService {
   }
 
   findAll() {
-    return this.taskRepository.find();
+    return this.taskRepository.find({
+      relations: {
+        person: true,
+      },
+      select: {
+        person: {
+          name: true,
+        },
+      },
+      order: {
+        finishAt: 'ASC',
+      },
+    });
   }
 
   findOne(id: number) {
     return this.taskRepository.findOneBy({ id: id });
   }
 
+  findByPerson(personId: number) {
+    return this.taskRepository.find({
+      relations: {
+        person: true,
+      },
+      select: {
+        person: {
+          name: true,
+        },
+      },
+      where: {
+        person: {
+          id: personId,
+        },
+      },
+    });
+  }
+
   update(id: number, updateTaskDto: UpdateTaskDto) {
+    console.log('updateTaskDto', updateTaskDto);
     return this.taskRepository.update(id, updateTaskDto);
   }
 
