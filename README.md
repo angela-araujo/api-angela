@@ -22,11 +22,11 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-[Postam Collection]((https://github.com/angela-araujo/postman_collection.json))
 
 
 ## Rotas
 
+[Postam Collection](https://github.com/angela-araujo/api-angela/blob/master/postman_collection.json)
 
 #### Criar usuário
 
