@@ -21,6 +21,6 @@ export class Task {
   @Column()
   deadLine: Date;
 
-  @ManyToOne(() => Person, (person) => person.tasks)
-  person: Person;
+  //   @ManyToOne(() => Person, (person) => person.tasks)
+  //   person: Person;
 }
