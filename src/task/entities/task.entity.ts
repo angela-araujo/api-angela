@@ -12,15 +12,18 @@ export class Task {
   @Column({ length: 350, nullable: true })
   description: string;
 
-  @Column()
+  @Column({ type: 'datetime', nullable: false })
   startAt: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'datetime', nullable: true })
   finishAt: Date;
 
-  @Column({ nullable: false })
+  @Column({ type: 'datetime', nullable: false })
   deadLine: Date;
 
-  @ManyToOne(() => Person, (person) => person.tasks)
+  @Column()
+  personId: number;
+
+  @ManyToOne(() => Person, (person) => person.tasks, { onDelete: 'SET NULL' })
   person: Person;
 }

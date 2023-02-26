@@ -1,8 +1,7 @@
-export class CreateTaskDto {
-  id: number;
+export interface CreateTaskDto {
   title: string;
-  description: string;
+  description?: string;
   startAt: Date;
-  finishAt: Date;
   deadLine: Date;
+  personId?: number;
 }
