@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Person } from 'src/person/entities/person.entity';
 import { IsNull, Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -14,28 +13,38 @@ export class TaskService {
 
   async create(createTaskDto: CreateTaskDto) {
     try {
-      // const newTask = new Task();
-      const taskInProgress = await this.taskRepository.find({
-        where: {
-          person: {
-            id: createTaskDto.personId,
+      console.log('service create:', createTaskDto);
+
+      if (createTaskDto.personId !== null) {
+        const taskInProgress = await this.taskRepository.find({
+          relations: {
+            person: true,
           },
-          finishAt: IsNull(),
-        },
-      });
-      console.log('createTaskDto: ', createTaskDto);
-      console.log('taskInProgress.length: ', taskInProgress.length);
-      if (taskInProgress.length !== 0) {
-        return {
-          code: 'TASK_IN_PROGRESS',
-          message: 'Já existe uma tarefa em progresso',
-          status: 409,
-        };
-      } else {
-        return this.taskRepository.save(createTaskDto);
+          select: {
+            person: {
+              name: true,
+            },
+          },
+          where: {
+            person: {
+              id: createTaskDto.personId,
+            },
+            finishAt: IsNull(),
+          },
+        });
+
+        if (taskInProgress.length !== 0) {
+          throw new NotFoundException({
+            code: 'TASK_IN_PROGRESS',
+            message: 'Já existe uma tarefa em progresso',
+            status: 404,
+          });
+        }
       }
+      return this.taskRepository.save(createTaskDto);
     } catch (error) {
-      if (error.code === 409) {
+      console.log('erro ao criar tarefa: ', error);
+      if (error.code === 404) {
         throw error;
       }
     }
@@ -57,12 +66,12 @@ export class TaskService {
     });
   }
 
-  findOne(id: number) {
-    return this.taskRepository.findOneBy({ id: id });
+  async findOne(id: number) {
+    return await this.taskRepository.findOneBy({ id: id });
   }
 
-  findByPerson(personId: number) {
-    return this.taskRepository.find({
+  async findByPerson(personId: number) {
+    return await this.taskRepository.find({
       relations: {
         person: true,
       },
@@ -79,14 +88,33 @@ export class TaskService {
     });
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
+  async update(id: number, updateTaskDto: UpdateTaskDto) {
     console.log('updateTaskDto', updateTaskDto);
-    return this.taskRepository.update(id, updateTaskDto);
+    const result = await this.taskRepository.update(id, updateTaskDto);
+    if (result.affected == 1) {
+      const taskEdited = await this.taskRepository.find({
+        where: { id: id },
+        relations: {
+          person: true,
+        },
+        select: {
+          person: {
+            name: true,
+          },
+        },
+      });
+      return taskEdited[0];
+    } else {
+      return {};
+    }
   }
 
   async remove(id: number) {
     try {
-      return await this.taskRepository.delete(id);
+      const deletedTask = await this.taskRepository.delete(id);
+      console.log('deleteTask: ', deletedTask);
+
+      return deletedTask;
     } catch (error) {
       console.log(error);
     }
