@@ -12,7 +12,7 @@ export class Task {
   @Column({ length: 350, nullable: true })
   description: string;
 
-  @Column({ type: 'datetime', nullable: false })
+  @Column({ type: 'datetime', nullable: true })
   startAt: Date;
 
   @Column({ type: 'datetime', nullable: true })
